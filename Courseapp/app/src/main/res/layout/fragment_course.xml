@@ -11,41 +11,53 @@
 
     <TextView
         android:id="@+id/course_info"
-        android:layout_width="393dp"
-        android:layout_height="130dp"
+        android:layout_width="358dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
         android:text="@string/hello_blank_fragment"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/commentsList"
-        android:layout_width="393dp"
-        android:layout_height="575dp"
+        android:layout_width="278dp"
+        android:layout_height="439dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/course_info"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.094" />
 
     <EditText
         android:id="@+id/addComment"
         android:layout_width="392dp"
         android:layout_height="51dp"
         android:ems="10"
+        android:background="@color/cardview_light_background"
         android:hint="@string/newcomment"
         android:importantForAutofill="no"
-        android:inputType="textPassword"
+        android:inputType="textShortMessage"
         android:minHeight="48dp"
         android:textColorHint="#757575"
+        app:layout_constraintBottom_toTopOf="@+id/post_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentsList"
+        app:layout_constraintVertical_bias="0.73" />
+
+    <Button
+        android:id="@+id/post_comment"
+        android:layout_width="387dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="16dp"
+        android:text="Post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentsList" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

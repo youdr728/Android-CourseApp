@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment {
             }
 
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-            String url = "http://10.244.35.120:5000/";
+            String url = "https://course-app-zaish-youdr.azurewebsites.net/";
             JSONObject jsonBody = null;
             try {
                 jsonBody = new JSONObject("{\"username\": " + username + ", \"password\": " + password + "}");

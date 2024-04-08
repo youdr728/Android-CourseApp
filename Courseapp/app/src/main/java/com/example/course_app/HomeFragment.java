@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
-    String url = "http://10.244.35.120:5000/";
+    String url = "https://course-app-zaish-youdr.azurewebsites.net/";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -116,7 +116,7 @@ public class HomeFragment extends Fragment {
 
         courseList.setOnItemClickListener((adapterView, view1, i, l) -> {
             Course current_course = (Course) courses.get(i);
-            editor.putInt("current_course_id", current_course.getId());
+            editor.putString("current_course_id", current_course.getId());
             editor.putString("current_course_name", current_course.getCourseName());
             editor.putString("current_course_info", current_course.getCourseInfo());
             editor.apply();

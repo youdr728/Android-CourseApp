@@ -14,13 +14,13 @@ if course_id is None:
     exit(1)
 '''
 
-response2 = requests.post("http://127.0.0.1:5000" + "/add_courses",
+response2 = requests.post("https://course-app-zaish-youdr.azurewebsites.net" + "/add_courses",
                           json={
                               "course_names": ["TDDD78", "TSEA28", "TDDD80", "TDDD79"]
                           })
 
 register_user_1 = requests.post("http://127.0.0.1:5000" + "/register", json={'username': 'Yousef', 'password': 'hello12'})
-login_user_1 =requests.post("http://127.0.0.1:5000" + "/user/login", json={'username': 'Yousef', 'password': 'hello12'})
+login_user_1 =requests.post("https://course-app-zaish-youdr.azurewebsites.net" + "/user/login", json={'username': 'Yousef', 'password': 'hello12'})
 token1 = login_user_1.json()['token']
 header1 = {'Authorization': "Bearer " + token1}
 courseid = "1"
