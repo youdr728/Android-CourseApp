@@ -5,7 +5,9 @@
     android:id="@+id/courseLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseFragment">
+    android:visibility="visible"
+    tools:context=".CourseFragment"
+    tools:visibility="visible">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -32,32 +34,54 @@
         app:layout_constraintTop_toBottomOf="@+id/course_info"
         app:layout_constraintVertical_bias="0.094" />
 
-    <EditText
-        android:id="@+id/addComment"
-        android:layout_width="392dp"
-        android:layout_height="51dp"
-        android:ems="10"
-        android:background="@color/cardview_light_background"
-        android:hint="@string/newcomment"
-        android:importantForAutofill="no"
-        android:inputType="textShortMessage"
-        android:minHeight="48dp"
-        android:textColorHint="#757575"
-        app:layout_constraintBottom_toTopOf="@+id/post_comment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentsList"
-        app:layout_constraintVertical_bias="0.73" />
-
     <Button
         android:id="@+id/post_comment"
-        android:layout_width="387dp"
-        android:layout_height="69dp"
+        android:layout_width="242dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="16dp"
         android:text="Post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/addComment"
+        android:layout_width="375dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="6dp"
+        android:ems="10"
+        android:imeOptions="actionSend"
+        android:inputType="textMultiLine"
+        android:text="Name"
+        app:layout_constraintBottom_toTopOf="@+id/post_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentsList" />
+
+    <Button
+        android:id="@+id/likeCourse"
+        android:layout_width="94dp"
+        android:layout_height="44dp"
+        android:text="Like"
+        app:layout_constraintBottom_toTopOf="@+id/commentsList"
+        app:layout_constraintEnd_toEndOf="@+id/course_info"
+        app:layout_constraintHorizontal_bias="0.148"
+        app:layout_constraintStart_toStartOf="@+id/course_info"
+        app:layout_constraintTop_toTopOf="@+id/course_info"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/unlikeCourse"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="17dp"
+        android:text="Unlike"
+        app:layout_constraintBottom_toTopOf="@+id/commentsList"
+        app:layout_constraintEnd_toEndOf="@+id/course_info"
+        app:layout_constraintHorizontal_bias="0.838"
+        app:layout_constraintStart_toStartOf="@+id/course_info"
+        app:layout_constraintTop_toTopOf="@+id/course_info"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

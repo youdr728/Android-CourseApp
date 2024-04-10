@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -59,7 +60,16 @@ public class CourseFragment extends Fragment {
         ListView commentList = view.findViewById(R.id.commentsList);
         ArrayList JsoncommentArray = new ArrayList<>();
         ArrayList commentArray = new ArrayList<String>();
+
+
         Button post_comment = view.findViewById(R.id.post_comment);
+        Button like_course = view.findViewById(R.id.likeCourse);
+        Button unlike_course = view.findViewById(R.id.unlikeCourse);
+
+
+        adapter = new ArrayAdapter<String>(getActivity(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                commentArray);
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -77,9 +87,6 @@ public class CourseFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    adapter = new ArrayAdapter<String>(getActivity(),
-                            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                            commentArray);
                     commentList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
@@ -109,10 +116,6 @@ public class CourseFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    adapter = new ArrayAdapter<String>(getActivity(),
-                            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                            commentArray);
                     commentList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
@@ -126,11 +129,33 @@ public class CourseFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest2);
         comment_tf.setText("");
-            CourseFragment new_course_fragment = new CourseFragment();
-            FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-            manager.replace(R.id.courseLayout, new_course_fragment).commit();
+
         });
 
+        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //ft.detach(CourseFragment.this).attach(CourseFragment.this).commit();
+
+        like_course.setOnClickListener(view1 -> {
+            String course_name = shared_info.getString("current_course_name", null);
+
+            // int counter TODO
+            JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest
+                    (Request.Method.POST, url+"like_course/" + course_name, null, response -> {
+                        Toast.makeText(requireContext(), "Course Liked!", Toast.LENGTH_SHORT).show();
+                    }, error -> Toast.makeText(getContext(), "Already liked!", Toast.LENGTH_SHORT).show()) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<String, String>() {
+                    };
+                    headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                    return headers;
+                }
+            };
+            requestQueue.add(jsonObjectRequest3);
+
+
+
+        });
 
         return view;
     }
