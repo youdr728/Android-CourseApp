@@ -152,9 +152,25 @@ public class CourseFragment extends Fragment {
                 }
             };
             requestQueue.add(jsonObjectRequest3);
+        });
 
+        unlike_course.setOnClickListener(view1 -> {
+            String course_name = shared_info.getString("current_course_name", null);
 
-
+            // int counter TODO
+            JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
+                    (Request.Method.POST, url+"unlike_course/" + course_name, null, response -> {
+                        Toast.makeText(requireContext(), "Course Unliked!", Toast.LENGTH_SHORT).show();
+                    }, error -> Toast.makeText(getContext(), "You have to like the course first to perform this action", Toast.LENGTH_SHORT).show()) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<String, String>() {
+                    };
+                    headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                    return headers;
+                }
+            };
+            requestQueue.add(jsonObjectRequest4);
         });
 
         return view;

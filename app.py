@@ -280,7 +280,7 @@ def like_Course(CourseName):
     db.session.commit()
     return jsonify({"message": "Successfully liked"}), 200
 
-@app.route("/unlike_course/<CourseName>", methods=["POST"])
+@app.route("/unlike_course/<CourseName>", methods=["DELETE"])
 @jwt_required()
 def unlike_Course(CourseName):
     course = Course.query.filter_by(course_name=CourseName).first()
