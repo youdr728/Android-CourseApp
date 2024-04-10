@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7891ba63-5fe1-48c3-9648-11b4902da83d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Courseapp/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Courseapp/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Courseapp/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Courseapp/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Courseapp/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Courseapp/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Courseapp/app/src/main/java/com/example/course_app/CourseFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Courseapp/app/src/main/java/com/example/course_app/CourseFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Courseapp/app/src/main/res/layout/fragment_course.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Courseapp/app/src/main/res/layout/fragment_course.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my_env/bin/python3" beforeDir="false" afterPath="$PROJECT_DIR$/../my_env/bin/python3" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/Courseapp/settings.gradle">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2eVhv3mDFzu2GG54pW1KyyBGXKo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "AnalyzeApkAction.lastApkPath": "C:/Users/youse/Downloads/course-app-2024-main/course-app-2024-main",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "CourseFragment",
+    "last_opened_file_path": "C:/Users/youse/Downloads/course-app-2024-main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "configurable.group.build",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\youse\Downloads\course-app-2024-main\course-app-2024-main\Courseapp\app\src\main" />
+      <recent name="C:\Users\youse\Downloads\course-app-2024-main\course-app-2024-main\Courseapp\app\src" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-d68999036c7f-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.14475.56" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7891ba63-5fe1-48c3-9648-11b4902da83d" name="Changes" comment="" />
+      <created>1711995879575</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711995879575</updated>
+      <workItem from="1711995984222" duration="1713000" />
+      <workItem from="1712158092281" duration="1734000" />
+      <workItem from="1712347887178" duration="1397000" />
+      <workItem from="1712522159438" duration="1454000" />
+      <workItem from="1712686536983" duration="1137000" />
+      <workItem from="1712770682079" duration="473000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
