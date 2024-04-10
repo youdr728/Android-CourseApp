@@ -1,6 +1,6 @@
 from datetime import *
 
-import requests
+
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -13,22 +13,41 @@ from flask_jwt_extended import *
 app = Flask(__name__)
 
 ACCESS_EXPIRES = timedelta(hours=2)
-''''
 
+if "AZURE_POSTGRESQL_CONNECTIONSTRING" in os.environ:
+    conn = os.environ["AZURE_POSTGRESQL_CONNECTIONSTRING"]
+    values = dict(x.split("=") for x in conn.split(' '))
+    user = values['user']
+    host = values['host']
+    database = values['dbname']
+    password = values['password']
+    db_uri = f'postgresql+psycopg2://{user}:{password}@{host}/{database}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    debug_flag = False
+    '''
 if 'WEBSITE_HOSTNAME' in os.environ:  # running on Azure: use postgresql
     database = os.environ['DBNAME']  # postgres
     host_root = '.postgres.database.azure.com'
     host = os.environ['DBHOST']  # app-name + root
     user = os.environ['DBUSER']
     password = os.environ['DBPASS']
+    dbname = course - app - zaish - youdr - database
+    host = course - app - zaish - youdr - server.postgres.database.azure.com
+    port = 5432
+    sslmode = require
+    user = yazegzuyeh
+    password = 0
+    AHF31077L6S65XM$
     db_uri = "postgres://courseapp_3spj_user:zwl2moyGOJBN1X7P5gGUEzb9UewhLfMi@dpg-clf4ha415k1s73f8e780-a/courseapp_3spj" #f'postgresql+psycopg2://{user}:{password}@{host}/{database}'
     debug_flag = False
-else: 
-'''# when running locally: use sqlite
+    '''
+    '''
+    else: 
+    # when running locally: use sqlite
 db_path = os.path.join(os.path.dirname(__file__), 'our.db')
 db_uri = 'sqlite:///{}'.format(db_path)
 debug_flag = True
-
+    '''
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['JWT_SECRET_KEY'] = "This is a very very secret key that I hide from you"
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
@@ -137,6 +156,15 @@ def get_courses():
     courses = Course.query.all()
     for course in courses:
         result.append(course.to_dict())
+    return jsonify(courses=result), 200
+
+@app.route("/comments/<int:CourseID>", methods=["GET"])
+def get_comments(CourseID):
+    result = []
+    comments = Comment.query.all()
+    for comment in comments:
+        if comment.course_id == CourseID:
+            result.append(comment.to_dict())
     return jsonify(courses=result), 200
 
 @app.route("/get_username/<int:user_id>", methods=["GET"])
@@ -303,8 +331,8 @@ if __name__ == "__main__":
         db.drop_all()
         db.create_all()
     '''
-    #from waitress import serve
-    #serve(app, host="0.0.0.0", port=8000)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=8000)
     app.debug = True
     #app.run(port=5000)
-    app.run(host='0.0.0.0', port=5000)
+    #app.run(host='0.0.0.0', port=8000)
