@@ -280,6 +280,22 @@ def like_Course(CourseName):
     db.session.commit()
     return jsonify({"message": "Successfully liked"}), 200
 
+@app.route("/unlike_course/<CourseName>", methods=["POST"])
+@jwt_required()
+def unlike_Course(CourseName):
+    course = Course.query.filter_by(course_name=CourseName).first()
+    if course is None:
+        return jsonify({"error": "Error"}), 400
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        return jsonify({"error": "user not found"}), 400
+    if user in course.users_liked:
+        course.users_liked.remove(user)
+        db.session.commit()
+        return jsonify({"Unliked Course!"}), 200
+    return jsonify({"You have to like the course first to perform this action"}), 400
+
 @app.route("/follow_user/<Username>", methods=["POST"])
 @jwt_required()
 def follow_User(Username):
