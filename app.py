@@ -291,7 +291,8 @@ def unlike_Course(CourseName):
     if user is None:
         return jsonify({"error": "user not found"}), 400
     if user in course.users_liked:
-        course.users_liked.remove(user)
+        likes.query.filter_by(user_id=user.id).delete()
+        #course.users_liked.remove(user)
         db.session.commit()
         return jsonify({"Unliked Course!"}), 200
     return jsonify({"You have to like the course first to perform this action"}), 400
