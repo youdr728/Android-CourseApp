@@ -291,11 +291,31 @@ def unlike_Course(CourseName):
     if user is None:
         return jsonify({"error": "user not found"}), 400
     if user in course.users_liked:
-        likes.query.filter_by(user_id=user.id).delete()
-        #course.users_liked.remove(user)
+        #likes.query.filter_by(user_id=user.id).delete()
+        #Course.query.filter(Course.users_liked.has(username=user))
+        #Course.query.join(Course.users_liked, aliased=True) \
+         #   .filter_by(username=user)
+        course.users_liked.remove(user)
         db.session.commit()
-        return jsonify({"Unliked Course!"}), 200
-    return jsonify({"You have to like the course first to perform this action"}), 400
+        return jsonify({"message": "Unliked Course!"}), 200
+    return jsonify({"message": "You have to like the course first to perform this action"}), 400
+
+
+@app.route("/unfollow_user/<Username>", methods=["POST"])
+@jwt_required()
+def unfollow_User(Username):
+    user_followed = User.query.filter_by(username=Username).first()
+    if user_followed is None:
+        return jsonify({"message": "Error"}), 400
+    followername = get_jwt_identity()
+    follower = User.query.filter_by(username=followername).first()
+    if follower is None:
+        return jsonify({"message": "user not found"}), 400
+    if follower in user_followed.followers:
+        user_followed.followers.remove(follower)
+        db.session.commit()
+        return jsonify({"message": "Successfully unfollowed"}), 200
+    return jsonify({"message": "You must follow the user first"}), 400
 
 @app.route("/follow_user/<Username>", methods=["POST"])
 @jwt_required()
@@ -311,15 +331,30 @@ def follow_User(Username):
         user_followed.followers.append(follower)
         db.session.commit()
         return jsonify({"message": "Successfully followed"}), 200
-    return jsonify({"message": "user already followed"}), 200
+    return jsonify({"message": "user already followed"}), 400
 
 @app.route("/show_followed_users_comments", methods = ["GET"])
+@jwt_required()
+def show_followed_users_likes():
+    user = get_jwt_identity()
+    user = User.query.filter_by(username=user).first()
+    result = []
+
+    #TODO
+    for users in user.followed:
+        for comment in users.comments:
+            result.append(comment.to_dict())
+
+    return jsonify(comments=result), 200
+
+@app.route("/show_followed_users_likes", methods = ["GET"])
 @jwt_required()
 def show_followed_users_comments():
     user = get_jwt_identity()
     user = User.query.filter_by(username=user).first()
     result = []
 
+    #TODO
     for users in user.followed:
         for comment in users.comments:
             result.append(comment.to_dict())
