@@ -8,7 +8,7 @@
     tools:context=".UserFragment" >
 
     <ListView
-        android:id="@+id/commentsList"
+        android:id="@+id/commentList"
         android:layout_width="208dp"
         android:layout_height="473dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
         android:layout_width="203dp"
         android:layout_height="473dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/commentsList"
+        app:layout_constraintEnd_toStartOf="@id/commentList"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

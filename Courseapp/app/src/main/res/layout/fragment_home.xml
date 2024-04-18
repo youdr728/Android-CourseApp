@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentsList"
+        app:layout_constraintTop_toBottomOf="@+id/commentList"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -46,7 +46,7 @@
         android:text="@string/courses"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/commentsList"
+        app:layout_constraintBottom_toTopOf="@+id/commentList"
         app:layout_constraintEnd_toStartOf="@+id/followedtext"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <ListView
-        android:id="@+id/commentsList"
+        android:id="@+id/commentList"
         android:layout_width="219dp"
         android:layout_height="629dp"
         app:layout_constraintBottom_toBottomOf="parent"

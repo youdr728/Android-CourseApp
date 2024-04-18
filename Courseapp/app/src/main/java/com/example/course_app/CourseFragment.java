@@ -2,20 +2,17 @@ package com.example.course_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,7 +57,7 @@ public class CourseFragment extends Fragment {
         courseInfo.setText(shared_info.getString("current_course_info", null));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
-        ListView commentList = view.findViewById(R.id.commentsList);
+        ListView commentList = view.findViewById(R.id.commentList);
         ArrayList JsoncommentArray = new ArrayList<>();
         ArrayList commentArray = new ArrayList<String>();
 
@@ -114,36 +111,33 @@ public class CourseFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest
-                (Request.Method.POST, url+"comment_course/" + shared_info.getString("current_course_id", null), jsonBody, response -> {
-                    try {
-                        JSONObject commentJSON = response.getJSONObject("new_comment");
-                        Comment new_comment = new Comment(commentJSON);
-                        String username = new_comment.getUsername();
-                        editor.putString("current_user_name", username);
-                        editor.apply();
-                        JsoncommentArray.add(new_comment);
-                        commentArray.add(new_comment.getText());
+            JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest
+                    (Request.Method.POST, url+"comment_course/" + shared_info.getString("current_course_id", null), jsonBody, response -> {
+                        try {
+                            JSONObject commentJSON = response.getJSONObject("new_comment");
+                            Comment new_comment = new Comment(commentJSON);
+                            JsoncommentArray.add(new_comment);
+                            commentArray.add(new_comment.getText());
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    commentList.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<String, String>() {
-                };
-                headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
-                return headers;
-            }
-        };
-        requestQueue.add(jsonObjectRequest2);
-        comment_tf.setText("");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        commentList.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<String, String>() {
+                    };
+                    headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                    return headers;
+                }
+            };
+            requestQueue.add(jsonObjectRequest2);
+            comment_tf.setText("");
 
-        CourseFragment courseFragment = new CourseFragment();
-        manager.replace(R.id.mainlayout, courseFragment).commit();
+            CourseFragment courseFragment = new CourseFragment();
+            manager.replace(R.id.mainlayout, courseFragment).commit();
 
         });
 
@@ -193,7 +187,10 @@ public class CourseFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Toast.makeText(getContext(), shared_info.getString("current_user_name", null), Toast.LENGTH_SHORT).show();
+                Comment target_comment = (Comment) JsoncommentArray.get(position);
+                String username = target_comment.getUsername();
+                editor.putString("current_user_name", username);
+                editor.apply();
                 UserFragment userFragment = new UserFragment();
                 manager.replace(R.id.mainlayout, userFragment).commit();
             }

@@ -20,13 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UserFragment extends Fragment {
@@ -54,7 +48,7 @@ public class UserFragment extends Fragment {
         Button unfollow = view.findViewById(R.id.unfollowButton);
         Button returnButton = view.findViewById(R.id.returnButtonfromuser);
         ListView liked_courses = view.findViewById(R.id.likesList);
-        ListView comments = view.findViewById(R.id.commentsList);
+        ListView comments = view.findViewById(R.id.commentList);
 
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -98,10 +92,13 @@ public class UserFragment extends Fragment {
         });
 
         returnButton.setOnClickListener(view1 -> {
-            if (shared_info.getString("current_fragment", null) == "CourseFragment"){
+            String currentFragment = shared_info.getString("current_fragment", null);
+
+            if ("CourseFragment".equals(currentFragment)){
                 CourseFragment courseFragment = new CourseFragment();
                 manager.replace(R.id.mainlayout, courseFragment).commit();
-            } else if (shared_info.getString("current_fragment", null) == "HomeFragment") {
+            }
+            if ("HomeFragment".equals(currentFragment)) {
                 HomeFragment homeFragment = new HomeFragment();
                 manager.replace(R.id.mainlayout, homeFragment).commit();
             }

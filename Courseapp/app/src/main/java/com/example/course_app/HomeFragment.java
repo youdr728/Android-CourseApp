@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ListView courseList = view.findViewById(R.id.CourseList);
-        ListView followedList = view.findViewById(R.id.commentsList);
+        ListView followedList = view.findViewById(R.id.commentList);
         TextView coursesHeader = view.findViewById(R.id.coursetext);
         coursesHeader.setText(R.string.courses);
         TextView followedHeader = view.findViewById(R.id.followedtext);
@@ -66,6 +67,9 @@ public class HomeFragment extends Fragment {
         editor.putString("current_fragment", currentFragment);
         editor.apply();
 
+        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        /*
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url+"get_user", null, response -> {
                     try {
@@ -88,12 +92,13 @@ public class HomeFragment extends Fragment {
 
         };
         requestQueue.add(jsonObjectRequest);
-
+        */
 
         ArrayList courses_names = new ArrayList<>();
         ArrayList courses = new ArrayList<>();
-        ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<String>(getActivity(),
+
+        ArrayAdapter<String> adapter1;
+        adapter1 = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 courses_names);
 
@@ -110,7 +115,7 @@ public class HomeFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    courseList.setAdapter(adapter);
+                    courseList.setAdapter(adapter1);
                 }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
         };
         requestQueue.add(jsonObjectRequest2);
@@ -123,14 +128,12 @@ public class HomeFragment extends Fragment {
             editor.putString("current_course_info", current_course.getCourseInfo());
             editor.apply();
             CourseFragment courseFragment = new CourseFragment();
-            FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
             manager.replace(R.id.mainlayout, courseFragment).commit();
         });
 
         logout.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest1 = new JsonObjectRequest
                     (Request.Method.POST, url + "user/logout", null, response -> {
-                        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
                         manager.replace(R.id.mainlayout, new LoginFragment()).commit();
                     }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
                 @Override
@@ -142,6 +145,48 @@ public class HomeFragment extends Fragment {
             };
             requestQueue.add(jsonObjectRequest1);
 
+        });
+
+        ArrayList followedArray = new ArrayList<String>();
+        ArrayAdapter<String> adapter2;
+        adapter2 = new ArrayAdapter<String>(getActivity(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                followedArray);
+        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest
+                (Request.Method.GET, url+"show_followed_users", null, response -> {
+                    try {
+                        JSONArray followed_users = response.getJSONArray("followed");
+
+                        for (int i = 0 ; i < followed_users.length(); i++) {
+                            followedArray.add(followed_users.getString(i));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    followedList.setAdapter(adapter2);
+                    adapter2.notifyDataSetChanged();
+                }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                return headers;
+            }
+
+        };
+        requestQueue.add(jsonObjectRequest3);
+
+        followedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                String username = followedList.getItemAtPosition(position).toString();
+                editor.putString("current_user_name", username);
+                editor.apply();
+                UserFragment userFragment = new UserFragment();
+                manager.replace(R.id.mainlayout, userFragment).commit();
+            }
         });
 
         // Inflate the layout for this fragment
