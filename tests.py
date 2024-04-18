@@ -20,7 +20,7 @@ response2 = requests.post("https://course-app-zaish-youdr.azurewebsites.net" + "
                           })
 
 register_user_1 = requests.post("http://127.0.0.1:5000" + "/register", json={'username': 'Yousef', 'password': 'hello12'})
-login_user_1 =requests.post("https://course-app-zaish-youdr.azurewebsites.net" + "/user/login", json={'username': 'Yousef', 'password': 'hello12'})
+login_user_1 =requests.post("https://course-app-zaish-youdr.azurewebsites.net" + "/user/login", json={'username': 'he', 'password': 'he1'})
 token1 = login_user_1.json()['token']
 header1 = {'Authorization': "Bearer " + token1}
 courseid = "1"
@@ -28,6 +28,7 @@ comment1 = requests.post("http://127.0.0.1:5000" + f"/comment_course/{courseid}"
 like1 = requests.post("http://127.0.0.1:5000"  + "/like_course/TDDD78", headers=header1)
 like2 = requests.post("http://127.0.0.1:5000"  + "/like_course/TSEA28", headers=header1)
 '''
+requests.get("https://course-app-zaish-youdr.azurewebsites.net" + "/get_followed_users", headers=header1)
 
 like1 = requests.post("http://127.0.0.1:5000"  + "/like_course/TDDD78", headers=header1)
 comment1 = requests.post(f"https://course-app.azurewebsites.net/comment_course/{course_id}", headers=header1, json={"text" : "Trash opinion, go kill urself"})

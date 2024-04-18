@@ -2,6 +2,7 @@ package com.example.course_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -54,6 +56,7 @@ public class CourseFragment extends Fragment {
 
         TextView courseInfo = view.findViewById(R.id.course_info);
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared_info.edit();
         courseInfo.setText(shared_info.getString("current_course_info", null));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
@@ -61,10 +64,12 @@ public class CourseFragment extends Fragment {
         ArrayList JsoncommentArray = new ArrayList<>();
         ArrayList commentArray = new ArrayList<String>();
 
+        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
 
         Button post_comment = view.findViewById(R.id.post_comment);
         Button like_course = view.findViewById(R.id.likeCourse);
         Button unlike_course = view.findViewById(R.id.unlikeCourse);
+        Button return_button = view.findViewById(R.id.returnButton);
 
 
         adapter = new ArrayAdapter<String>(getActivity(),
@@ -110,6 +115,8 @@ public class CourseFragment extends Fragment {
                     try {
                         JSONObject commentJSON = response.getJSONObject("new_comment");
                         Comment new_comment = new Comment(commentJSON);
+                        String username = new_comment.getUsername();
+                        editor.putString("current_user_name", username);
                         JsoncommentArray.add(new_comment);
                         commentArray.add(new_comment.getText());
 
@@ -130,10 +137,10 @@ public class CourseFragment extends Fragment {
         requestQueue.add(jsonObjectRequest2);
         comment_tf.setText("");
 
-        });
+        CourseFragment courseFragment = new CourseFragment();
+        manager.replace(R.id.mainlayout, courseFragment).commit();
 
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.detach(CourseFragment.this).attach(CourseFragment.this).commit();
+        });
 
         like_course.setOnClickListener(view1 -> {
             String course_name = shared_info.getString("current_course_name", null);
@@ -152,11 +159,41 @@ public class CourseFragment extends Fragment {
                 }
             };
             requestQueue.add(jsonObjectRequest3);
-
-
-
         });
 
+        unlike_course.setOnClickListener(view1 -> {
+            String course_name = shared_info.getString("current_course_name", null);
+
+            // int counter TODO
+            JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
+                    (Request.Method.POST, url+"unlike_course/" + course_name, null, response -> {
+                        Toast.makeText(requireContext(), "Course Unliked!", Toast.LENGTH_SHORT).show();
+                    }, error -> Toast.makeText(getContext(), "You have to like the course first to perform this action", Toast.LENGTH_SHORT).show()) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<String, String>() {
+                    };
+                    headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                    return headers;
+                }
+            };
+            requestQueue.add(jsonObjectRequest4);
+        });
+
+        return_button.setOnClickListener(view1 -> {
+            HomeFragment homeFragment = new HomeFragment();
+            manager.replace(R.id.mainlayout, homeFragment).commit();
+        });
+        commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                String item = adapter.getItem(position);
+                Toast.makeText(getContext(), shared_info.getString("current_user_name", null), Toast.LENGTH_SHORT).show();
+                UserFragment userFragment = new UserFragment();
+                manager.replace(R.id.mainlayout, userFragment).commit();
+            }
+        });
         return view;
     }
 }
