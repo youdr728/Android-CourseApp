@@ -77,6 +77,10 @@ public class CourseFragment extends Fragment {
                 commentArray);
 
 
+        String currentFragment = "CourseFragment";
+        editor.putString("current_fragment", currentFragment);
+        editor.apply();
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url+"comments/" + shared_info.getString("current_course_id", null), null, response -> {
                     try {
@@ -117,6 +121,7 @@ public class CourseFragment extends Fragment {
                         Comment new_comment = new Comment(commentJSON);
                         String username = new_comment.getUsername();
                         editor.putString("current_user_name", username);
+                        editor.apply();
                         JsoncommentArray.add(new_comment);
                         commentArray.add(new_comment.getText());
 
@@ -188,7 +193,6 @@ public class CourseFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                String item = adapter.getItem(position);
                 Toast.makeText(getContext(), shared_info.getString("current_user_name", null), Toast.LENGTH_SHORT).show();
                 UserFragment userFragment = new UserFragment();
                 manager.replace(R.id.mainlayout, userFragment).commit();

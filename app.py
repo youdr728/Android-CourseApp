@@ -291,10 +291,6 @@ def unlike_Course(CourseName):
     if user is None:
         return jsonify({"error": "user not found"}), 400
     if user in course.users_liked:
-        #likes.query.filter_by(user_id=user.id).delete()
-        #Course.query.filter(Course.users_liked.has(username=user))
-        #Course.query.join(Course.users_liked, aliased=True) \
-         #   .filter_by(username=user)
         course.users_liked.remove(user)
         db.session.commit()
         return jsonify({"message": "Unliked Course!"}), 200
@@ -336,30 +332,25 @@ def follow_User(Username):
 @app.route("/show_followed_users_comments", methods = ["GET"])
 @jwt_required()
 def show_followed_users_likes():
-    user = get_jwt_identity()
-    user = User.query.filter_by(username=user).first()
+    user_name = get_jwt_identity()
+    user = User.query.filter_by(username=user_name).first()
     result = []
-
     #TODO
     for users in user.followed:
-        for comment in users.comments:
-            result.append(comment.to_dict())
+        result.append(users.to_dict())
 
     return jsonify(comments=result), 200
 
-@app.route("/show_followed_users_likes", methods = ["GET"])
+@app.route("/show_followed_users", methods = ["GET"])
 @jwt_required()
-def show_followed_users_comments():
-    user = get_jwt_identity()
-    user = User.query.filter_by(username=user).first()
+def show_followed_users():
+    user_name = get_jwt_identity()
+    user = User.query.filter_by(username=user_name).first()
     result = []
 
-    #TODO
     for users in user.followed:
-        for comment in users.comments:
-            result.append(comment.to_dict())
-
-    return jsonify(comments=result), 200
+        result.append(users.username)
+    return jsonify(followed=result), 200
 
 @app.route("/comment_course/<int:CourseID>", methods=["POST"])
 @jwt_required()

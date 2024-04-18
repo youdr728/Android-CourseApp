@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,10 +55,13 @@ public class UserFragment extends Fragment {
         Button returnButton = view.findViewById(R.id.returnButtonfromuser);
         ListView liked_courses = view.findViewById(R.id.likesList);
         ListView comments = view.findViewById(R.id.commentsList);
+
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
 
         username.setText(shared_info.getString("current_user_name", null));
+
 
         follow.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -93,6 +97,15 @@ public class UserFragment extends Fragment {
             requestQueue.add(jsonObjectRequest2);
         });
 
+        returnButton.setOnClickListener(view1 -> {
+            if (shared_info.getString("current_fragment", null) == "CourseFragment"){
+                CourseFragment courseFragment = new CourseFragment();
+                manager.replace(R.id.mainlayout, courseFragment).commit();
+            } else if (shared_info.getString("current_fragment", null) == "HomeFragment") {
+                HomeFragment homeFragment = new HomeFragment();
+                manager.replace(R.id.mainlayout, homeFragment).commit();
+            }
+        });
 
         return view;
     }

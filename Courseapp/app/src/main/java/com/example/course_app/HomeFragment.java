@@ -62,6 +62,10 @@ public class HomeFragment extends Fragment {
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shared_info.edit();
 
+        String currentFragment = "HomeFragment";
+        editor.putString("current_fragment", currentFragment);
+        editor.apply();
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url+"get_user", null, response -> {
                     try {
@@ -78,9 +82,7 @@ public class HomeFragment extends Fragment {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<String, String>() {
                 };
-                System.out.println(headers);
                 headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
-                System.out.println(headers);
                 return headers;
             }
 
