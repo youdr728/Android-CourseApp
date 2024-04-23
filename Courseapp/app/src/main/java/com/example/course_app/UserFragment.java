@@ -125,7 +125,6 @@ public class UserFragment extends Fragment {
                 (Request.Method.GET, url + "show_users_comments/" + shared_info.getString("current_user_name", null), null, response -> {
                     try {
                         JSONArray comments = response.getJSONArray("comments");
-                        System.out.println("comments json: " + comments);
 
                         for (int j = 0; j < comments.length(); j++) {
                             JSONObject obj = comments.getJSONObject(j);
@@ -143,7 +142,33 @@ public class UserFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest3);
 
+        JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
+                (Request.Method.GET, url + "show_users_likes/" + shared_info.getString("current_user_name", null), null, response -> {
 
+                    try {
+                        JSONArray likes = response.getJSONArray("likes");
+                        System.out.println("likes json: " + likes);
+                        /*
+                        for (int j = 0; j < comments.length(); j++) {
+                            JSONObject obj = comments.getJSONObject(j);
+                            Comment new_comment = new Comment(obj);
+                            JsoncommentArray.add(new_comment);
+                            commentArray.add(new_comment.getText());
+                        }
+
+                         */
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                   // comments_lv.setAdapter(adapter);
+                   // adapter.notifyDataSetChanged();
+
+
+
+                }, error -> Toast.makeText(getContext(), "Couldn't load likes", Toast.LENGTH_SHORT).show()) {
+        };
+        requestQueue.add(jsonObjectRequest4);
 
 
 

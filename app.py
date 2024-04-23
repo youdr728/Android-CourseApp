@@ -347,10 +347,9 @@ def show_users_likes(Username):
     result = []
     courses = Course.query.all()
     for course in courses:
-        for like in course.users_liked:
-            if like.user.id == user.id:
-                result.append(like.to_dict())
-    return jsonify(likes=result), 200
+        if user in course.users_likes:
+            result.append(course.to_dict())
+    return jsonify(courses=result), 200
 
 @app.route("/show_followed_users", methods = ["GET"])
 @jwt_required()
