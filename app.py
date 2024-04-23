@@ -329,16 +329,14 @@ def follow_User(Username):
         return jsonify({"message": "Successfully followed"}), 200
     return jsonify({"message": "user already followed"}), 400
 
-@app.route("/show_followed_users_comments", methods = ["GET"])
-@jwt_required()
-def show_followed_users_likes():
-    user_name = get_jwt_identity()
-    user = User.query.filter_by(username=user_name).first()
+@app.route("/show_users_comments/<Username>", methods = ["GET"])
+def show_users_comments(Username):
+    user = User.query.filter_by(username=Username).first()
     result = []
-    #TODO
-    for users in user.followed:
-        result.append(users.to_dict())
-
+    comments = Comment.query.all()
+    for comment in comments:
+        if comment.user_id == user.id:
+            result.append(comment.to_dict())
     return jsonify(comments=result), 200
 
 @app.route("/show_followed_users", methods = ["GET"])
