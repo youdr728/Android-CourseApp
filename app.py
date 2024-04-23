@@ -332,6 +332,8 @@ def follow_User(Username):
 @app.route("/show_users_comments/<Username>", methods = ["GET"])
 def show_users_comments(Username):
     user = User.query.filter_by(username=Username).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
     result = []
     comments = Comment.query.all()
     for comment in comments:
@@ -339,11 +341,26 @@ def show_users_comments(Username):
             result.append(comment.to_dict())
     return jsonify(comments=result), 200
 
+@app.route("/show_users_likes/<Username>", methods = ["GET"])
+def show_users_likes(Username):
+    user = User.query.filter_by(username=Username).first()
+    result = []
+    courses = Course.query.all()
+    for course in courses:
+        for like in course.users_liked:
+            if like.user.id == user.id:
+                result.append(like.to_dict())
+    return jsonify(likes=result), 200
+
 @app.route("/show_followed_users", methods = ["GET"])
 @jwt_required()
 def show_followed_users():
     user_name = get_jwt_identity()
     user = User.query.filter_by(username=user_name).first()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
     result = []
 
     for users in user.followed:

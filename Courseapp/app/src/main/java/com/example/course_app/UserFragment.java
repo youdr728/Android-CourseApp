@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,12 +22,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserFragment extends Fragment {
 
     String url = "https://course-app-zaish-youdr.azurewebsites.net/";
+    ArrayAdapter<String> adapter;
+
 
     public UserFragment() {
         // Required empty public constructor
@@ -48,11 +57,18 @@ public class UserFragment extends Fragment {
         Button unfollow = view.findViewById(R.id.unfollowButton);
         Button returnButton = view.findViewById(R.id.returnButtonfromuser);
         ListView liked_courses = view.findViewById(R.id.likesList);
-        ListView comments = view.findViewById(R.id.commentList);
+        ListView comments_lv = view.findViewById(R.id.commentList);
 
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        ArrayList commentArray = new ArrayList<String>();
+        ArrayList JsoncommentArray = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(getActivity(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                commentArray);
+
 
         username.setText(shared_info.getString("current_user_name", null));
 
@@ -104,6 +120,37 @@ public class UserFragment extends Fragment {
             }
         });
 
+
+        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest
+                (Request.Method.GET, url + "show_users_comments/" + shared_info.getString("current_user_name", null), null, response -> {
+                    try {
+                        JSONArray comments = response.getJSONArray("comments");
+                        System.out.println("comments json: " + comments);
+
+                        for (int j = 0; j < comments.length(); j++) {
+                            JSONObject obj = comments.getJSONObject(j);
+                            Comment new_comment = new Comment(obj);
+                            JsoncommentArray.add(new_comment);
+                            commentArray.add(new_comment.getText());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    comments_lv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }, error -> Toast.makeText(getContext(), "Couldn't load comments", Toast.LENGTH_SHORT).show()) {
+        };
+        requestQueue.add(jsonObjectRequest3);
+
+
+
+
+
+
         return view;
     }
+
+
+
 }
