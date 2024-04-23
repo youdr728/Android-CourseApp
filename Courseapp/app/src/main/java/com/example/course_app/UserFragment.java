@@ -33,7 +33,8 @@ import java.util.Map;
 public class UserFragment extends Fragment {
 
     String url = "https://course-app-zaish-youdr.azurewebsites.net/";
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapter1;
+    ArrayAdapter<String> adapter2;
 
 
     public UserFragment() {
@@ -56,7 +57,7 @@ public class UserFragment extends Fragment {
         Button follow = view.findViewById(R.id.followButton);
         Button unfollow = view.findViewById(R.id.unfollowButton);
         Button returnButton = view.findViewById(R.id.returnButtonfromuser);
-        ListView liked_courses = view.findViewById(R.id.likesList);
+        ListView liked_courses_lv = view.findViewById(R.id.likesList);
         ListView comments_lv = view.findViewById(R.id.commentList);
 
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -65,9 +66,15 @@ public class UserFragment extends Fragment {
 
         ArrayList commentArray = new ArrayList<String>();
         ArrayList JsoncommentArray = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(getActivity(),
+
+        ArrayList likesArray = new ArrayList<String>();
+
+        adapter1 = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 commentArray);
+        adapter2 = new ArrayAdapter<String>(getActivity(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                likesArray);
 
 
         username.setText(shared_info.getString("current_user_name", null));
@@ -136,35 +143,47 @@ public class UserFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    comments_lv.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    comments_lv.setAdapter(adapter1);
+                    adapter1.notifyDataSetChanged();
                 }, error -> Toast.makeText(getContext(), "Couldn't load comments", Toast.LENGTH_SHORT).show()) {
         };
         requestQueue.add(jsonObjectRequest3);
+
+        //TODO
+        /*
+        comments_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Comment target_comment = (Comment) JsoncommentArray.get(position);
+                int course_id = target_comment.getCourseId();
+                editor.putString("current_user_name", username);
+                editor.apply();
+                UserFragment userFragment = new UserFragment();
+                manager.replace(R.id.mainlayout, userFragment).commit();
+            }
+        });
+
+         */
+        //TODO
 
         JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
                 (Request.Method.GET, url + "show_users_likes/" + shared_info.getString("current_user_name", null), null, response -> {
 
                     try {
-                        JSONArray likes = response.getJSONArray("likes");
+                        JSONArray likes = response.getJSONArray("courses");
                         System.out.println("likes json: " + likes);
-                        /*
-                        for (int j = 0; j < comments.length(); j++) {
-                            JSONObject obj = comments.getJSONObject(j);
-                            Comment new_comment = new Comment(obj);
-                            JsoncommentArray.add(new_comment);
-                            commentArray.add(new_comment.getText());
-                        }
 
-                         */
+                        for (int j = 0; j < likes.length(); j++) {
+                            JSONObject obj = likes.getJSONObject(j);
+                            likesArray.add(obj.getString("course_name"));
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                   // comments_lv.setAdapter(adapter);
-                   // adapter.notifyDataSetChanged();
-
-
+                    liked_courses_lv.setAdapter(adapter2);
+                    adapter2.notifyDataSetChanged();
 
                 }, error -> Toast.makeText(getContext(), "Couldn't load likes", Toast.LENGTH_SHORT).show()) {
         };

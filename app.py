@@ -180,7 +180,7 @@ def get_username(user_id):
 def get_user():
 	user_name = get_jwt_identity()
 	user = User.query.filter_by(username=user_name).first()
-	return user.to_dict(), 200
+	return jsonify({"user": user.to_dict()}), 200
 
 @app.route("/get_followed_users", methods=["GET"])
 @jwt_required()
