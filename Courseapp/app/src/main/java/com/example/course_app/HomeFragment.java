@@ -93,6 +93,29 @@ public class HomeFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest);
         */
+        JsonObjectRequest jsonObjectRequestuser = new JsonObjectRequest
+                (Request.Method.GET, url+"get_user/" + shared_info.getString("current_course_id", null), null, response -> {
+                    try {
+                        JSONObject user = response.getJSONObject("user");
+
+                        editor.putString("current_logged_user", user.getString("username"));
+                        editor.apply();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<String, String>() {
+                };
+                headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
+                return headers;
+            }
+
+        };
+        requestQueue.add(jsonObjectRequestuser);
 
         ArrayList courses_names = new ArrayList<>();
         ArrayList courses = new ArrayList<>();

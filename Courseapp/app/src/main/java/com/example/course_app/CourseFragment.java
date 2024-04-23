@@ -100,27 +100,6 @@ public class CourseFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest);
 
-        JsonObjectRequest jsonObjectRequestuser = new JsonObjectRequest
-                (Request.Method.GET, url+"get_user/" + shared_info.getString("current_course_id", null), null, response -> {
-                    try {
-                        JSONArray comments = response.getJSONArray("courses");
-
-                        for (int i = 0 ; i < comments.length(); i++) {
-                            JSONObject obj = comments.getJSONObject(i);
-                            Comment new_comment = new Comment(obj);
-                            JsoncommentArray.add(new_comment);
-                            commentArray.add(new_comment.getText());
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    commentList.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
-
-        };
-        requestQueue.add(jsonObjectRequestuser);
 
         post_comment.setOnClickListener(view1 -> {
             EditText comment_tf = view.findViewById(R.id.addComment);
