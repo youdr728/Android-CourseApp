@@ -347,7 +347,7 @@ def show_users_likes(Username):
     result = []
     courses = Course.query.all()
     for course in courses:
-        if user in course.users_likes:
+        if user in course.users_liked:
             result.append(course.to_dict())
     return jsonify(courses=result), 200
 
