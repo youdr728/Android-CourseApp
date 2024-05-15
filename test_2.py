@@ -1,6 +1,6 @@
 import unittest
 from flask import json
-from app import app, db, Course, User, bcrypt
+from app import app, db, User
 
 class Test(unittest.TestCase):
     def setUp(self):
@@ -9,8 +9,7 @@ class Test(unittest.TestCase):
 
         with self.app.app_context():
             db.create_all()
-            hashed_password = bcrypt.generate_password_hash('testpass').decode('utf-8')
-            user = User(username='testuser', password=hashed_password)
+            user = User(username='testuser', password='testpass')
             db.session.add(user)
             db.session.commit()
 
@@ -34,6 +33,7 @@ class Test(unittest.TestCase):
         response = self.client.post('/user/login', data=json.dumps(login_data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertIn('User Name or Password is Incorrect', json.loads(response.data)['message'])
+
 
 
 if __name__ == '__main__':
