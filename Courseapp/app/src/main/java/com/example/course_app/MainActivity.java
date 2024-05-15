@@ -4,8 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * Main activity for the course application, serves as the entry point.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Initializes the activity and sets the initial fragment.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

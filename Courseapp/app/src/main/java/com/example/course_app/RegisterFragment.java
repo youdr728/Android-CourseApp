@@ -20,6 +20,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Manages user registration and navigation to the login screen.
+ */
 
 public class RegisterFragment extends Fragment {
 
@@ -31,11 +34,14 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+        // Registration and login navigation buttons
         Button regButton = view.findViewById(R.id.registerButton);
         Button regLoginButton = view.findViewById(R.id.regloginButton);
 
+        // Handle registration button click
         regButton.setOnClickListener(v -> {
             EditText usernametext = view.findViewById(R.id.regUserName);
             EditText passwordtext = view.findViewById(R.id.addComment);
@@ -46,6 +52,7 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
+            // Setup Volley request queue for network requests
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://course-app-zaish-youdr.azurewebsites.net/";
             JSONObject jsonBody = new JSONObject();
@@ -57,6 +64,7 @@ public class RegisterFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            // Create request to perform registration
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url+"register", jsonBody, response -> {
                         Toast.makeText(requireContext(), "You Registerd!", Toast.LENGTH_SHORT).show();
@@ -69,6 +77,7 @@ public class RegisterFragment extends Fragment {
 
         });
 
+        // Handle navigation to login fragment
         regLoginButton.setOnClickListener(v -> {
             LoginFragment inloggFragment = new LoginFragment();
             FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();

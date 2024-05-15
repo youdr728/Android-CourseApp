@@ -3,6 +3,9 @@ package com.example.course_app;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Represents a comment entity with related user and course information.
+ */
 public class Comment {
     private int id;
     private String text;
@@ -10,6 +13,9 @@ public class Comment {
     private int userId;
     private String username;
 
+    /**
+     * Constructs a Comment object from a JSON representation.
+     */
     public Comment(JSONObject jsonObject) {
         try {
             this.id = jsonObject.getInt("id");

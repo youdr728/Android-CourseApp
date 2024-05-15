@@ -22,6 +22,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Handles user login and registration navigation within the app.
+ */
 
 public class LoginFragment extends Fragment {
 
@@ -37,11 +40,14 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        // Login and registration buttons
         Button loginButton = view.findViewById(R.id.loginButton);
         Button regButton = view.findViewById(R.id.loginRegButton);
 
+        // Handle login button click
         loginButton.setOnClickListener(v -> {
             System.out.println("login button clicked");
             EditText userNameText = view.findViewById(R.id.loginUserName);
@@ -52,6 +58,7 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
+            // Setup Volley request queue for network requests
             RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
             String url = "https://course-app-zaish-youdr.azurewebsites.net/";
             JSONObject jsonBody = null;
@@ -62,6 +69,7 @@ public class LoginFragment extends Fragment {
             }
 
 
+            // Create request to perform login
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url+"user/login", jsonBody, response -> {
                         HomeFragment homeFragment = new HomeFragment();
@@ -84,6 +92,7 @@ public class LoginFragment extends Fragment {
 
         });
 
+        // Handle registration button click
         regButton.setOnClickListener(v -> {
             System.out.println("clicked button");
             FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();

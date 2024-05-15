@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Manages the home interface of the app, displaying lists of courses and followed users.
+ */
 
 public class HomeFragment extends Fragment {
 
@@ -49,7 +52,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Setup list views and headers for courses and followed users
         ListView courseList = view.findViewById(R.id.CourseList);
         ListView followedList = view.findViewById(R.id.commentList);
         TextView coursesHeader = view.findViewById(R.id.coursetext);
@@ -58,41 +64,21 @@ public class HomeFragment extends Fragment {
         followedHeader.setText(R.string.followed);
 
         Button logout = view.findViewById(R.id.logout);
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
+        // Volley request queue for API calls
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shared_info.edit();
 
+        // Store current fragment name in shared preferences
         String currentFragment = "HomeFragment";
         editor.putString("current_fragment", currentFragment);
         editor.apply();
 
+        // Fragment transaction manager for navigating between fragments
         FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
 
-        /*
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url+"get_user", null, response -> {
-                    try {
-                        String name = response.getString("username");
-                        int id = response.getInt("id");
-                        editor.putInt("current_user_id", id);
-                        editor.putString("current_user_name", name);
-                        editor.apply();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<String, String>() {
-                };
-                headers.put("Authorization", "Bearer " + shared_info.getString("current_user_token", null));
-                return headers;
-            }
-
-        };
-        requestQueue.add(jsonObjectRequest);
-        */
+        // Fetch logged-in user's username
         JsonObjectRequest jsonObjectRequestuser = new JsonObjectRequest
                 (Request.Method.GET, url+"get_user/" + shared_info.getString("current_course_id", null), null, response -> {
                     try {
@@ -117,9 +103,9 @@ public class HomeFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequestuser);
 
+        // Setup course list with adapter
         ArrayList courses_names = new ArrayList<>();
         ArrayList courses = new ArrayList<>();
-
         ArrayAdapter<String> adapter1;
         adapter1 = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -143,9 +129,10 @@ public class HomeFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest2);
 
-
+        // Enable interaction with course list
         courseList.setOnItemClickListener((adapterView, view1, i, l) -> {
             Course current_course = (Course) courses.get(i);
+            // save course info
             editor.putString("current_course_id", current_course.getId());
             editor.putString("current_course_name", current_course.getCourseName());
             editor.putString("current_course_info", current_course.getCourseInfo());
@@ -154,6 +141,7 @@ public class HomeFragment extends Fragment {
             manager.replace(R.id.mainlayout, courseFragment).commit();
         });
 
+        // Logout functionality
         logout.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest1 = new JsonObjectRequest
                     (Request.Method.POST, url + "user/logout", null, response -> {
@@ -172,6 +160,7 @@ public class HomeFragment extends Fragment {
 
         ArrayList followedArray = new ArrayList<String>();
         ArrayAdapter<String> adapter2;
+        // adapter for followed users list
         adapter2 = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 followedArray);
@@ -200,6 +189,7 @@ public class HomeFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest3);
 
+        // Enable interaction with followed list
         followedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
