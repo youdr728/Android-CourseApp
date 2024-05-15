@@ -11,8 +11,9 @@ from flask_jwt_extended import *
 
 
 app = Flask(__name__)
-
 ACCESS_EXPIRES = timedelta(hours=2)
+testing = True
+app.config['TESTING'] = testing
 
 if "AZURE_POSTGRESQL_CONNECTIONSTRING" in os.environ:
     conn = os.environ["AZURE_POSTGRESQL_CONNECTIONSTRING"]
@@ -48,10 +49,14 @@ db_path = os.path.join(os.path.dirname(__file__), 'our.db')
 db_uri = 'sqlite:///{}'.format(db_path)
 debug_flag = True
     '''
+
+#for unittesting
+if testing:
+    db_uri = 'sqlite:///:memory:'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['JWT_SECRET_KEY'] = "This is a very very secret key that I hide from you"
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
-
 
 db = SQLAlchemy(app)
 messages = []
