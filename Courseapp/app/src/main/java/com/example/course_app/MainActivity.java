@@ -1,28 +1,32 @@
 package com.example.course_app;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
-/**
- * Main activity for the course application, serves as the entry point.
- */
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Initializes the activity and sets the initial fragment.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.mainlayout, LoginFragment.class, null)
-                    .commit();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
 
-}
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        NavController navController = navHostFragment.getNavController();
+        NavigationUI.setupActionBarWithNavController(this, navController);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = ((NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentContainerView)).getNavController();
+        return navController.navigateUp() || super.onSupportNavigateUp();
+    }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +67,8 @@ public class UserFragment extends Fragment {
 
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         ArrayList commentArray = new ArrayList<String>();
         ArrayList JsoncommentArray = new ArrayList<>();
@@ -121,16 +124,7 @@ public class UserFragment extends Fragment {
 
         // Return button functionality
         returnButton.setOnClickListener(view1 -> {
-            String currentFragment = shared_info.getString("current_fragment", null);
-
-            if ("CourseFragment".equals(currentFragment)){
-                CourseFragment courseFragment = new CourseFragment();
-                manager.replace(R.id.mainlayout, courseFragment).commit();
-            }
-            if ("HomeFragment".equals(currentFragment)) {
-                HomeFragment homeFragment = new HomeFragment();
-                manager.replace(R.id.mainlayout, homeFragment).commit();
-            }
+            navController.popBackStack();
         });
 
 

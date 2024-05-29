@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,22 +67,16 @@ public class HomeFragment extends Fragment {
 
         Button logout = view.findViewById(R.id.logout);
 
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
+
         // Volley request queue for API calls
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shared_info.edit();
 
-        // Store current fragment name in shared preferences
-        String currentFragment = "HomeFragment";
-        editor.putString("current_fragment", currentFragment);
-        editor.apply();
-
-        // Fragment transaction manager for navigating between fragments
-        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-
         // Fetch logged-in user's username
         JsonObjectRequest jsonObjectRequestuser = new JsonObjectRequest
-                (Request.Method.GET, url+"get_user/" + shared_info.getString("current_course_id", null), null, response -> {
+                (Request.Method.GET, url+"get_user", null, response -> {
                     try {
                         JSONObject user = response.getJSONObject("user");
 
@@ -137,15 +133,14 @@ public class HomeFragment extends Fragment {
             editor.putString("current_course_name", current_course.getCourseName());
             editor.putString("current_course_info", current_course.getCourseInfo());
             editor.apply();
-            CourseFragment courseFragment = new CourseFragment();
-            manager.replace(R.id.mainlayout, courseFragment).commit();
+            navController.navigate(R.id.action_homeFragment2_to_courseFragment);
         });
 
         // Logout functionality
         logout.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest1 = new JsonObjectRequest
                     (Request.Method.POST, url + "user/logout", null, response -> {
-                        manager.replace(R.id.mainlayout, new LoginFragment()).commit();
+                        navController.navigate(R.id.action_homeFragment2_to_loginFragment);
                     }, error -> Toast.makeText(getContext(), "Response error", Toast.LENGTH_SHORT).show()) {
                 @Override
                 public Map<String, String> getHeaders() {
@@ -198,7 +193,7 @@ public class HomeFragment extends Fragment {
                 editor.putString("current_user_name", username);
                 editor.apply();
                 UserFragment userFragment = new UserFragment();
-                manager.replace(R.id.mainlayout, userFragment).commit();
+                navController.navigate(R.id.action_homeFragment2_to_userFragment2);
             }
         });
 

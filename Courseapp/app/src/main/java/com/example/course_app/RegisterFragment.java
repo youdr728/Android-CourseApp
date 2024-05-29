@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import org.json.JSONObject;
 
 public class RegisterFragment extends Fragment {
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,9 @@ public class RegisterFragment extends Fragment {
         // Registration and login navigation buttons
         Button regButton = view.findViewById(R.id.registerButton);
         Button regLoginButton = view.findViewById(R.id.regloginButton);
+
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
+
 
         // Handle registration button click
         regButton.setOnClickListener(v -> {
@@ -68,8 +74,7 @@ public class RegisterFragment extends Fragment {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url+"register", jsonBody, response -> {
                         Toast.makeText(requireContext(), "You Registerd!", Toast.LENGTH_SHORT).show();
-                        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-                        manager.replace(R.id.mainlayout, new LoginFragment()).commit();
+                        navController.popBackStack();
                     }, error -> Toast.makeText(requireContext(), "Response error", Toast.LENGTH_SHORT).show());
 
             requestQueue.add(jsonObjectRequest);
@@ -79,9 +84,7 @@ public class RegisterFragment extends Fragment {
 
         // Handle navigation to login fragment
         regLoginButton.setOnClickListener(v -> {
-            LoginFragment inloggFragment = new LoginFragment();
-            FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-            manager.replace(R.id.mainlayout, inloggFragment).commit();
+            navController.popBackStack();
         });
 
         // Inflate the layout for this fragment

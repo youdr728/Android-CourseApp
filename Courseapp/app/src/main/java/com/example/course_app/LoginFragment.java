@@ -1,11 +1,14 @@
 package com.example.course_app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,9 +50,11 @@ public class LoginFragment extends Fragment {
         Button loginButton = view.findViewById(R.id.loginButton);
         Button regButton = view.findViewById(R.id.loginRegButton);
 
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
+
+
         // Handle login button click
         loginButton.setOnClickListener(v -> {
-            System.out.println("login button clicked");
             EditText userNameText = view.findViewById(R.id.loginUserName);
             EditText passwordText = view.findViewById(R.id.loginPassword);
             String username = userNameText.getText().toString();
@@ -82,8 +87,7 @@ public class LoginFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-                        manager.replace(R.id.mainlayout, homeFragment).commit();
+                        navController.navigate(R.id.action_loginFragment_to_homeFragment2);
                     }, error -> {
                         Toast.makeText(requireContext(), "Response error", Toast.LENGTH_SHORT).show();
                     });
@@ -94,10 +98,7 @@ public class LoginFragment extends Fragment {
 
         // Handle registration button click
         regButton.setOnClickListener(v -> {
-            System.out.println("clicked button");
-            FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-            manager.replace(R.id.mainlayout, new RegisterFragment()).commit();
-            System.out.println("began transaction");
+            navController.navigate(R.id.registerFragment);
         });
 
         return view;

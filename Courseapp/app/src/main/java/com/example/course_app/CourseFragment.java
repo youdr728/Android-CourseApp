@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,9 +72,6 @@ public class CourseFragment extends Fragment {
         ArrayList JsoncommentArray = new ArrayList<>();
         ArrayList commentArray = new ArrayList<String>();
 
-        // Managing fragment transactions
-        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-
         // Buttons for interacting with the course
         Button post_comment = view.findViewById(R.id.post_comment);
         Button like_course = view.findViewById(R.id.likeCourse);
@@ -80,15 +79,11 @@ public class CourseFragment extends Fragment {
 
         Button return_button = view.findViewById(R.id.returnButton);
 
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         adapter = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 commentArray);
-
-
-        String currentFragment = "CourseFragment";
-        editor.putString("current_fragment", currentFragment);
-        editor.apply();
 
         // Fetch comments for the course
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -149,8 +144,9 @@ public class CourseFragment extends Fragment {
             requestQueue.add(jsonObjectRequest2);
             comment_tf.setText("");
 
-            CourseFragment courseFragment = new CourseFragment();
-            manager.replace(R.id.mainlayout, courseFragment).commit();
+            int id = navController.getCurrentDestination().getId();
+            navController.popBackStack(id, true);
+            navController.navigate(id);
 
         });
 
@@ -192,8 +188,7 @@ public class CourseFragment extends Fragment {
         });
 
         return_button.setOnClickListener(view1 -> {
-            HomeFragment homeFragment = new HomeFragment();
-            manager.replace(R.id.mainlayout, homeFragment).commit();
+            navController.popBackStack();
         });
         commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -203,8 +198,7 @@ public class CourseFragment extends Fragment {
                 String username = target_comment.getUsername();
                 editor.putString("current_user_name", username);
                 editor.apply();
-                UserFragment userFragment = new UserFragment();
-                manager.replace(R.id.mainlayout, userFragment).commit();
+                navController.navigate(R.id.action_courseFragment_to_userFragment2);
             }
         });
         return view;
