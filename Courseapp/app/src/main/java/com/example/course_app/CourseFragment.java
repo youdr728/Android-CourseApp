@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles the user interface and functionality for course details.
+ */
+
 public class CourseFragment extends Fragment {
 
     String url = "https://course-app-zaish-youdr.azurewebsites.net/";
@@ -49,35 +55,37 @@ public class CourseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course, container, false);
 
+        // Setup TextView for course information
         TextView courseInfo = view.findViewById(R.id.course_info);
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shared_info.edit();
         courseInfo.setText(shared_info.getString("current_course_info", null));
+
+        // Volley request queue for API calls
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
+        // Setup ListView and adapter for comments
         ListView commentList = view.findViewById(R.id.commentList);
         ArrayList JsoncommentArray = new ArrayList<>();
         ArrayList commentArray = new ArrayList<String>();
 
-        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
-
+        // Buttons for interacting with the course
         Button post_comment = view.findViewById(R.id.post_comment);
         Button like_course = view.findViewById(R.id.likeCourse);
         Button unlike_course = view.findViewById(R.id.unlikeCourse);
+
         Button return_button = view.findViewById(R.id.returnButton);
 
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         adapter = new ArrayAdapter<String>(getActivity(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 commentArray);
 
-
-        String currentFragment = "CourseFragment";
-        editor.putString("current_fragment", currentFragment);
-        editor.apply();
-
+        // Fetch comments for the course
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url+"comments/" + shared_info.getString("current_course_id", null), null, response -> {
                     try {
@@ -100,7 +108,7 @@ public class CourseFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest);
 
-
+        // Add a new comment
         post_comment.setOnClickListener(view1 -> {
             EditText comment_tf = view.findViewById(R.id.addComment);
             String comment = comment_tf.getText().toString();
@@ -136,15 +144,16 @@ public class CourseFragment extends Fragment {
             requestQueue.add(jsonObjectRequest2);
             comment_tf.setText("");
 
-            CourseFragment courseFragment = new CourseFragment();
-            manager.replace(R.id.mainlayout, courseFragment).commit();
+            int id = navController.getCurrentDestination().getId();
+            navController.popBackStack(id, true);
+            navController.navigate(id);
 
         });
 
+        // Like a course
         like_course.setOnClickListener(view1 -> {
             String course_name = shared_info.getString("current_course_name", null);
 
-            // int counter TODO
             JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest
                     (Request.Method.POST, url+"like_course/" + course_name, null, response -> {
                         Toast.makeText(requireContext(), "Course Liked!", Toast.LENGTH_SHORT).show();
@@ -163,7 +172,6 @@ public class CourseFragment extends Fragment {
         unlike_course.setOnClickListener(view1 -> {
             String course_name = shared_info.getString("current_course_name", null);
 
-            // int counter TODO
             JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
                     (Request.Method.POST, url+"unlike_course/" + course_name, null, response -> {
                         Toast.makeText(requireContext(), "Course Unliked!", Toast.LENGTH_SHORT).show();
@@ -180,8 +188,7 @@ public class CourseFragment extends Fragment {
         });
 
         return_button.setOnClickListener(view1 -> {
-            HomeFragment homeFragment = new HomeFragment();
-            manager.replace(R.id.mainlayout, homeFragment).commit();
+            navController.popBackStack();
         });
         commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -191,8 +198,7 @@ public class CourseFragment extends Fragment {
                 String username = target_comment.getUsername();
                 editor.putString("current_user_name", username);
                 editor.apply();
-                UserFragment userFragment = new UserFragment();
-                manager.replace(R.id.mainlayout, userFragment).commit();
+                navController.navigate(R.id.action_courseFragment_to_userFragment2);
             }
         });
         return view;

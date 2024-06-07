@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages user profile displaying user's comments and liked courses, and allows to follow or unfollow the user.
+ */
 public class UserFragment extends Fragment {
 
     String url = "https://course-app-zaish-youdr.azurewebsites.net/";
@@ -62,7 +67,8 @@ public class UserFragment extends Fragment {
 
         SharedPreferences shared_info = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        FragmentTransaction manager = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         ArrayList commentArray = new ArrayList<String>();
         ArrayList JsoncommentArray = new ArrayList<>();
@@ -80,6 +86,7 @@ public class UserFragment extends Fragment {
         username.setText(shared_info.getString("current_user_name", null));
 
 
+        // Follow button functionality
         follow.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url+"follow_user/" + shared_info.getString("current_user_name", null), null, response -> {
@@ -97,6 +104,7 @@ public class UserFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         });
 
+        // Unfollow button functionality
         unfollow.setOnClickListener(view1 -> {
             JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest
                     (Request.Method.POST, url+"unfollow_user/" + shared_info.getString("current_user_name", null), null, response -> {
@@ -114,20 +122,13 @@ public class UserFragment extends Fragment {
             requestQueue.add(jsonObjectRequest2);
         });
 
+        // Return button functionality
         returnButton.setOnClickListener(view1 -> {
-            String currentFragment = shared_info.getString("current_fragment", null);
-
-            if ("CourseFragment".equals(currentFragment)){
-                CourseFragment courseFragment = new CourseFragment();
-                manager.replace(R.id.mainlayout, courseFragment).commit();
-            }
-            if ("HomeFragment".equals(currentFragment)) {
-                HomeFragment homeFragment = new HomeFragment();
-                manager.replace(R.id.mainlayout, homeFragment).commit();
-            }
+            navController.popBackStack();
         });
 
 
+        // Load user comments
         JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest
                 (Request.Method.GET, url + "show_users_comments/" + shared_info.getString("current_user_name", null), null, response -> {
                     try {
@@ -149,24 +150,7 @@ public class UserFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest3);
 
-        //TODO
-        /*
-        comments_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Comment target_comment = (Comment) JsoncommentArray.get(position);
-                int course_id = target_comment.getCourseId();
-                editor.putString("current_user_name", username);
-                editor.apply();
-                UserFragment userFragment = new UserFragment();
-                manager.replace(R.id.mainlayout, userFragment).commit();
-            }
-        });
-
-         */
-        //TODO
-
+        // Load user liked courses
         JsonObjectRequest jsonObjectRequest4 = new JsonObjectRequest
                 (Request.Method.GET, url + "show_users_likes/" + shared_info.getString("current_user_name", null), null, response -> {
 
